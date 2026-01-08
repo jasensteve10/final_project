@@ -1,0 +1,63 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+
+    - name: Install Redis
+      apt:
+        name: redis-server
+        state: present
+
+    - name: Start Redis
+      service:
+        name: redis-server
+        state: started
+        enabled: yes
+
+    - name: Setup Node.js 16 source
+      shell: curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install app dependencies
+      npm:
+        path: /home/vagrant/userapi
+
+    - name: Install PM2 locally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Start application with PM2
+      command: pm2 start src/index.js --name "userapi"
+      args:
+        chdir: /home/vagrant/userapi
+      environment:
+        REDIS_HOST: 127.0.0.1
+        REDIS_PORT: 6379
+
+    - name: Wait for app to start
+      pause:
+        seconds: 5
+
+    - name: Health check
+      uri:
+        url: http://localhost:3000/health
+        status_code: 200
+        return_content: yes
+      register: health_check
+
+    - name: Print health check result
+      debug:
+        msg: "Health Status: {{ health_check.json.status }}"
