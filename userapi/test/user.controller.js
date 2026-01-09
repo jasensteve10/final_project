@@ -58,88 +58,86 @@ describe('User', () => {
       })
     })
   })
-  // TODO Create test for the get method
 
-})
-// TODO Create test for the get method
 
-describe('Get', () => {
-  it('get a user by username', (done) => {
-    const user = {
-      username: 'sergkudinov',
-      firstname: 'Sergei',
-      lastname: 'Kudinov'
-    }
-    // Create user first
-    userController.create(user, (err, result) => {
-      expect(err).to.be.equal(null)
-      expect(result).to.be.equal('OK')
-
-      // Then get it
-      userController.get(user.username, (err, result) => {
+  describe('Get', () => {
+    it('get a user by username', (done) => {
+      const user = {
+        username: 'sergkudinov',
+        firstname: 'Sergei',
+        lastname: 'Kudinov'
+      }
+      // Create user first
+      userController.create(user, (err, result) => {
         expect(err).to.be.equal(null)
-        expect(result.firstname).to.be.equal('Sergei')
-        expect(result.lastname).to.be.equal('Kudinov')
+        expect(result).to.be.equal('OK')
+
+        // Then get it
+        userController.get(user.username, (err, result) => {
+          expect(err).to.be.equal(null)
+          expect(result.firstname).to.be.equal('Sergei')
+          expect(result.lastname).to.be.equal('Kudinov')
+          done()
+        })
+      })
+    })
+
+    it('cannot get a user when it does not exist', (done) => {
+      userController.get('invalid', (err, result) => {
+        expect(err).to.not.be.equal(null)
+        expect(result).to.be.equal(null)
         done()
       })
     })
   })
 
-  it('cannot get a user when it does not exist', (done) => {
-    userController.get('invalid', (err, result) => {
-      expect(err).to.not.be.equal(null)
-      expect(result).to.be.equal(null)
-      done()
-    })
-  })
-})
-
-describe('Update', () => {
-  it('update a user', (done) => {
-    const user = {
-      username: 'sergkudinov',
-      firstname: 'Sergei',
-      lastname: 'Kudinov'
-    }
-    userController.create(user, (err, result) => {
-      expect(err).to.be.equal(null)
-
-      const updatedUser = {
-        firstname: 'Sergei2',
-        lastname: 'Kudinov2'
+  describe('Update', () => {
+    it('update a user', (done) => {
+      const user = {
+        username: 'sergkudinov',
+        firstname: 'Sergei',
+        lastname: 'Kudinov'
       }
-
-      userController.update(user.username, updatedUser, (err, result) => {
+      userController.create(user, (err, result) => {
         expect(err).to.be.equal(null)
-        expect(result).to.be.equal('OK')
 
-        userController.get(user.username, (err, result) => {
-          expect(result.firstname).to.be.equal('Sergei2')
-          expect(result.lastname).to.be.equal('Kudinov2')
-          done()
+        const updatedUser = {
+          firstname: 'Sergei2',
+          lastname: 'Kudinov2'
+        }
+
+        userController.update(user.username, updatedUser, (err, result) => {
+          expect(err).to.be.equal(null)
+          expect(result).to.be.equal('OK')
+
+          userController.get(user.username, (err, result) => {
+            expect(result.firstname).to.be.equal('Sergei2')
+            expect(result.lastname).to.be.equal('Kudinov2')
+            done()
+          })
         })
       })
     })
   })
-})
 
-describe('Delete', () => {
-  it('delete a user', (done) => {
-    const user = {
-      username: 'sergkudinov',
-      firstname: 'Sergei',
-      lastname: 'Kudinov'
-    }
-    userController.create(user, (err, result) => {
-      expect(err).to.be.equal(null)
-
-      userController.delete(user.username, (err, result) => {
+  describe('Delete', () => {
+    it('delete a user', (done) => {
+      const user = {
+        username: 'sergkudinov',
+        firstname: 'Sergei',
+        lastname: 'Kudinov'
+      }
+      userController.create(user, (err, result) => {
         expect(err).to.be.equal(null)
-        expect(result).to.be.equal('OK')
 
-        userController.get(user.username, (err, result) => {
-          expect(err).to.not.be.equal(null)
-          done()
+        userController.delete(user.username, (err, result) => {
+          expect(err).to.be.equal(null)
+          expect(result).to.be.equal('OK')
+
+          userController.get(user.username, (err, result) => {
+            expect(err).to.not.be.equal(null)
+            done()
+          })
         })
       })
     })
