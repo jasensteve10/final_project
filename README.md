@@ -3,8 +3,8 @@
 This project implements a complete DevOps pipeline for a Node.js web application, including testing, CI/CD, Infrastructure as Code, Docker containerization, and Kubernetes orchestration.
 
 ## Author
-- **Name:** [Your Name/Group Members]
-- **Group:** [Your Group]
+- **Name:** ZAPFACK MESSIANE jasen steve
+
 
 ## Project Logic
 The application is a simple User API allowing CRUD operations on users, storing data in Redis.
@@ -70,7 +70,6 @@ cd userapi
 docker build -t userapi .
 docker run -p 3000:3000 userapi
 ```
-(Note: The app needs Redis. You might want to use docker-compose or run a network with Redis).
 
 ### 6. Kubernetes
 To deploy to a standard K8s cluster (e.g. Minikube):
